@@ -1,0 +1,18 @@
+.btn-fileinput{
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    margin: 0;
+}
+
+.btn-fileinput *{
+    margin: 0;
+}
+
+.btn-fileinput input {
+    position: absolute;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    -ms-filter: 'alpha(opacity=0)';
+}

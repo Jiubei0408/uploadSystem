@@ -1,0 +1,6 @@
+*.pyc
+.idea/
+uploads/
+venv
+*.db
+secure.py
