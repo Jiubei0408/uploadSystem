@@ -1,0 +1,39 @@
+{% extends "template.html" %}
+{% block title %}
+    信息列表
+{% endblock %}
+{% block main %}
+    <center>
+        <div style="width: 50%">
+            <div class="row">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3>统计信息(共&nbsp;{{ count }}&nbsp;条)</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    {% for i in labels %}
+                                        <td>{{ i }}</td>
+                                    {% endfor %}
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for i in content %}
+                                    <tr>
+                                        {% for j in i %}
+                                            <td>{{ j }}</td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </center>
+{% endblock %}
