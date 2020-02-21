@@ -13,7 +13,6 @@ def login_api():
     studentId = form.studentId.data
     password = form.password.data
     remember = form.remember_me.data
-    print('test: {}-{}'.format(studentId, password))
     user = User.get(studentId=studentId, password=password)
     if user is None:
         flash('登录失败，用户名或密码错误', 'error')
