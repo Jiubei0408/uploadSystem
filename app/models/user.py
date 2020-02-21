@@ -1,4 +1,4 @@
-from sqlalchemy import Column, DateTime, String, Boolean
+from sqlalchemy import Column, DateTime, String, Integer
 from flask_login import UserMixin
 
 from app.models.base import Base
@@ -15,10 +15,15 @@ class User(UserMixin, Base):
     studentId = Column(String(100), primary_key=True)
     password = Column(String(100))
     nickname = Column(String(100))
-    remember_me = Column(Boolean, default=False)
+    permission = Column(Integer, default=0)
     update_time = Column(DateTime)
 
     @staticmethod
     @login_manager.user_loader
     def load_user(id_):
         return User.get_by_id(id_)
+
+    @staticmethod
+    @login_manager.unauthorized_handler
+    def unauthorized_handler():
+        return "请先登录", 401
