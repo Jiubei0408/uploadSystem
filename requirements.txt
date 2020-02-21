@@ -1,3 +1,6 @@
-flask-wtf
 flask
 flask-bootstrap
+flask_sqlalchemy
+flask-wtf
+sqlalchemy
+wtforms
