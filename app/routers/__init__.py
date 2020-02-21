@@ -1,5 +1,6 @@
-from app.routers import (main)
+from app.routers import (main, session)
 
 
 def get_blueprints():
-    return [main.bp]
+    return [(main.bp, '/'),
+            (session.bp, '/session')]
