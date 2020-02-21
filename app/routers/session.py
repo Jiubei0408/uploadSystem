@@ -10,6 +10,9 @@ bp = Blueprint('session', __name__)
 @bp.route('/login', methods=['POST'])
 def login_api():
     form = LoginForm()
+    if not form.validate_on_submit():
+        flash(form.errors, 'error')
+        return redirect(url_for('main.login'))
     studentId = form.studentId.data
     password = form.password.data
     remember = form.remember_me.data
