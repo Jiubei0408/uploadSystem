@@ -33,7 +33,7 @@ def create_app(name):
     if not os.path.exists(upload_path):
         os.makedirs(upload_path)
 
-    register_plugin(flask_app)
     register_bp(flask_app)
+    register_plugin(flask_app)
 
     return flask_app
