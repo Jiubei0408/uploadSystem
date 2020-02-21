@@ -23,8 +23,8 @@ def login_api():
     return redirect(url_for('main.index'))
 
 
-@login_required
 @bp.route('/logout', methods=['POST'])
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('main.index'))
