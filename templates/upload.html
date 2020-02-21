@@ -1,31 +1,24 @@
 {% extends "template.html" %}
-{% block title %}
-    信息上传
-{% endblock %}
-{% block main %}
-    <link href="/static/css/main.css" rel="stylesheet"/>
-    <div class="center-block" style="margin-top: 7%; z-index: 100">
-        <div class="container">
-            <div class="col-lg-6 col-lg-offset-3">
-                <div class="well well-sm">
-                    <h3 style="text-align: center">健康码数据收集</h3>
-                    <form method="post" enctype="multipart/form-data" action="/upload">
-                        {{ form.csrf_token }}
-                        {{ wtf.form_field(form.studentId) }}
-                        {{ wtf.form_field(form.name) }}
-                        {{ wtf.form_field(form.isolution) }}
-                        {{ wtf.form_field(form.code_color) }}
-                        <div>
-                            <label class="control-label" for="code_photo">健康码图片：</label>
-                            <span class="btn btn-success btn-fileinput">
+{% block title %}信息上传{% endblock %}
+{% block page_content %}
+    <div class="col-lg-6 col-lg-offset-3">
+        <div class="well well-sm">
+            <h3 style="text-align: center">健康码数据收集</h3>
+            <form method="post" enctype="multipart/form-data" action="/upload">
+                {{ form.csrf_token }}
+                {{ wtf.form_field(form.studentId) }}
+                {{ wtf.form_field(form.name) }}
+                {{ wtf.form_field(form.isolution) }}
+                {{ wtf.form_field(form.code_color) }}
+                <div>
+                    <label class="control-label" for="code_photo">健康码图片：</label>
+                    <span class="btn btn-success btn-fileinput">
                             {{ wtf.form_field(form.code_photo) }}
                         </span>
-                        </div>
-                        <br>
-                        {{ form.submit }}
-                    </form>
                 </div>
-            </div>
+                <br>
+                {{ form.submit }}
+            </form>
         </div>
     </div>
 {% endblock %}

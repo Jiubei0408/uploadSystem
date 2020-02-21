@@ -14,7 +14,7 @@ bp = Blueprint('main', __name__)
 @bp.route('/')
 def index():
     form = UploadForm()
-
+    flash('test', 'success')
     return render_template('upload.html', form=form)
 
 
