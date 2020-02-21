@@ -23,16 +23,24 @@
                     <li><a href="/">首页</a></li>
                     <li><a href={{ url_for('main.lists') }}>列表</a></li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#">
-                    <span class="glyphicon glyphicon-log-in">
-                            {% if user and user.login %}
-                                {{ user.name }}
-                            {% else %}
+                <ul class="nav navbar-nav navbar-right" style="margin-right: 15px">
+                    {% if user and user.nickname %}
+                        <li><a>你好，{{ user.nickname }}|</a></li>
+                        <li>
+                            <form id="logout" method="post" action="/session/logout"></form>
+                            <button type="submit" class="glyphicon glyphicon-log-in btn btn-default btn-sm"
+                                    style="margin-top: 10px;" onclick="$('#logout').submit()">
+                                登出
+                            </button>
+                        </li>
+                    {% else %}
+                        <li>
+                            <button class="glyphicon glyphicon-log-in btn btn-default btn-sm" style="margin-top: 10px;"
+                                    onclick="window.location = '{{ url_for('main.login') }}'; ">
                                 登录
-                            {% endif %}
-                    </span>
-                    </a></li>
+                            </button>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -41,20 +49,6 @@
 
 {% block content %}
     <div class="container">
-        <center>
-            {% block flash_message %}
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                    {% if messages %}
-                        {% for category, message in messages %}
-                            <div class="alert alert-success alert-dismissible" style="width: 300px">
-                                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                {{ message }}
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                {% endwith %}
-            {% endblock %}
-        </center>
         {% block page_content %}
         {% endblock %}
     </div>
@@ -69,8 +63,27 @@
 {% endblock %}
 
 {% block scripts %}
-    <link href={{ bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap') }}/>
-    <script src={{ bootstrap_find_resource('jquery.js', cdn='jquery') }}></script>
-    <script src={{ bootstrap_find_resource('js/bootstrap.js', cdn='bootstrap') }}></script>
-    <link href="/static/css/main.css" rel="stylesheet"/>
+    <link href="{{ bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap') }}" rel="stylesheet"/>
+    <script src="{{ bootstrap_find_resource('jquery.js', cdn='jquery') }}"></script>
+    <script src="{{ bootstrap_find_resource('js/bootstrap.js', cdn='bootstrap') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.toast.js') }}"></script>
+    <link href="{{ url_for('static', filename='css/jquery.toast.css') }}" rel="stylesheet"/>
+    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet"/>
+    {#  显示flash_message  #}
+    <script>
+        {% block flash_message %}
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        $.toast({
+                            heading: '{{ message }}',
+                            position: 'top-center',
+                            loader: false,
+                            icon: '{{ category }}'
+                        });
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        {% endblock %}
+    </script>
 {% endblock %}
