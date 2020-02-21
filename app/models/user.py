@@ -1,12 +1,24 @@
+from sqlalchemy import Column, DateTime, String, Boolean
+from flask_login import UserMixin
+
 from app.models.base import Base
-from sqlalchemy import Column, Integer, DateTime, String
+from app import login_manager
 
 
-class User(Base):
+class User(UserMixin, Base):
     __tablename__ = 'user'
+
+    @property
+    def id(self):
+        return self.studentId
+
     studentId = Column(String(100), primary_key=True)
-    name = Column(String(100))
-    isolution = Column(Integer)
-    code_color = Column(Integer)
-    submit_time = Column(DateTime)
-    times = Column(Integer)
+    password = Column(String(100))
+    nickname = Column(String(100))
+    remember_me = Column(Boolean, default=False)
+    update_time = Column(DateTime)
+
+    @staticmethod
+    @login_manager.user_loader
+    def load_user(id_):
+        return User.get_by_id(id_)
