@@ -40,6 +40,13 @@ class Base(db.Model):
         return self
 
     @classmethod
+    def get(cls, **kwargs):
+        res = cls.search(**kwargs)
+        if res['count'] == 0:
+            return None
+        return res['data'][0]
+
+    @classmethod
     def get_by_id(cls, id_):
         return cls.query.get(id_)
 
