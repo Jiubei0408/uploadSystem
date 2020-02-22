@@ -1,6 +1,8 @@
 flask
 flask-bootstrap
-flask_sqlalchemy
+flask-login
+flask-sqlalchemy
 flask-wtf
 sqlalchemy
+werkzeug
 wtforms
