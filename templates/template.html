@@ -22,16 +22,17 @@
                 <ul class="nav navbar-nav">
                     <li><a href="/">首页</a></li>
                     <li><a href={{ url_for('main.lists') }}>列表</a></li>
+                    <li><a href={{ url_for('main.admin') }}>管理员</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right" style="margin-right: 15px">
                     {% if user and user.nickname %}
-                        <li><a>你好，{{ user.nickname }}|</a></li>
+                        <form id="logout" method="post" action="/session/logout"></form>
                         <li>
-                            <form id="logout" method="post" action="/session/logout"></form>
-                            <button type="submit" class="glyphicon glyphicon-log-in btn btn-default btn-sm"
-                                    style="margin-top: 10px;" onclick="$('#logout').submit()">
-                                登出
-                            </button>
+                            <a style="padding: 10px">你好，{{ user.nickname }}&nbsp;&nbsp;
+                                <button type="submit" class="glyphicon glyphicon-log-in btn btn-default btn-sm"
+                                        style="top: 0" onclick="$('#logout').submit()">&nbsp;登出
+                                </button>
+                            </a>
                         </li>
                     {% else %}
                         <li>
