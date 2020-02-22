@@ -12,10 +12,16 @@ class User(UserMixin, Base):
 
     @property
     def id(self):
-        return self.studentId
+        return self.userId
 
-    studentId = Column(String(100), primary_key=True)
-    password = Column(String(100))
+    @property
+    def name(self):
+        return self.userName
+
+    userId = Column(Integer, primary_key=True, autoincrement=True)
+    # 登录名，学生（用户）可以是学号，教师可以是工号，甚至本名也行
+    userName = Column(String(100))
+    password = Column(String(100), default=123456, nullable=False)
     nickname = Column(String(100))
     permission = Column(Integer, default=0)
     update_time = Column(DateTime)
