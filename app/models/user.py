@@ -12,9 +12,9 @@ class User(UserMixin, Base):
 
     @property
     def id(self):
-        return self.studentId
+        return self.username
 
-    studentId = Column(String(100), primary_key=True)
+    username = Column(String(100), primary_key=True)
     password = Column(String(100))
     nickname = Column(String(100))
     permission = Column(Integer, default=0)
