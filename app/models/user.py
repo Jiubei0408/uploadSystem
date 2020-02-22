@@ -4,6 +4,8 @@ from flask_login import UserMixin
 from app.models.base import Base
 from app import login_manager
 
+from app.libs.error_code import AuthFailed
+
 
 class User(UserMixin, Base):
     __tablename__ = 'user'
@@ -26,4 +28,4 @@ class User(UserMixin, Base):
     @staticmethod
     @login_manager.unauthorized_handler
     def unauthorized_handler():
-        return "请先登录", 401
+        raise AuthFailed()

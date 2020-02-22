@@ -1,11 +1,33 @@
 import os
+from datetime import date, datetime
 
 from flask_login import LoginManager
-from flask import Flask
+from flask import Flask as _Flask
+from flask.json import JSONEncoder as _JSONEncoder
+
+from flask_bootstrap import Bootstrap
 
 from app.models.base import db
+from app.libs.error_code import ServerError
+
+
+class JSONEncoder(_JSONEncoder):
+    def default(self, o):
+        if hasattr(o, 'keys') and hasattr(o, '__getitem__'):
+            return dict(o)
+        if isinstance(o, datetime):
+            return o.strftime('%Y-%m-%d %H:%M:%S')
+        if isinstance(o, date):
+            return o.strftime('%Y-%m-%d')
+        raise ServerError()
+
+
+class Flask(_Flask):
+    json_encoder = JSONEncoder
+
 
 login_manager = LoginManager()
+bootstrap = Bootstrap()
 
 
 def register_bp(flask_app):
@@ -22,6 +44,7 @@ def register_plugin(flask_app):
         db.create_all()
 
     login_manager.init_app(flask_app)
+    bootstrap.init_app(flask_app)
 
 
 def create_app(name):
