@@ -1,6 +1,5 @@
 from werkzeug.exceptions import HTTPException
 
-
 from app import create_app
 from app.libs.error import APIException
 from app.libs.error_code import ServerError
@@ -27,4 +26,8 @@ def framework_error(e):
 
 
 if __name__ == '__main__':
-    app.run(port=80)
+    try:
+        app.run(port=80)
+    except Exception as e:
+        print(e)
+        raise e

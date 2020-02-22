@@ -22,9 +22,6 @@
                 <ul class="nav navbar-nav">
                     <li><a href="/">首页</a></li>
                     <li><a href={{ url_for('main.lists') }}>列表</a></li>
-                    {% if user and user.permission == 1 %}
-                        <li><a href={{ url_for('main.admin') }}>管理员</a></li>
-                    {% endif %}
                 </ul>
                 <ul class="nav navbar-nav navbar-right" style="margin-right: 15px">
                     {% if user and user.nickname %}
