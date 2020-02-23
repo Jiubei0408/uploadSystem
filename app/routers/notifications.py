@@ -43,7 +43,6 @@ def detail(nf_id):
         'code': 200,
         'res': res
     })
-    pass
 
 
 @bp.route("/check/<int:nf_id>", methods=['POST'])
