@@ -27,7 +27,7 @@ def index():
 
 @bp.route('/lists')
 def lists():
-    res = User.search()
+    res = User.search(permission=0)
 
     return render_template('list.html',
                            count=res['count'],

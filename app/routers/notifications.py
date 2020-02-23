@@ -27,9 +27,15 @@ def detail(nf_id):
     if nf is None:
         raise NotFound("没有找到该通知")
     result = CheckedNotification.search(nf_id=nf_id, order={'user_id': 'asc'})
-    checked = [User.get(username=i.user_id) for i in result['data']]
+    checked = []
     unchecked = []
+    for data in result['data']:
+        user = User.get(username=data.user_id)
+        if user.permission == 0:
+            checked.append(user)
     for user in User.search()['data']:
+        if user.permission == 1:
+            continue
         if user not in checked:
             unchecked.append(user)
 
