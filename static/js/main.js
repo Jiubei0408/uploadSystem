@@ -31,15 +31,15 @@ function toggleCollapse(id, nf_id) {
             }
             res = data.responseJSON.res;
             text = "";
+            text += "共完成" + res.checked.length + "人";
             if (res.checked.length > 0) {
-                text += "共完成" + res.checked.length + "人";
                 text += ",分别为:";
                 for (let i of res.checked) {
                     text += '<br>' + i.username + ' ' + i.nickname;
                 }
             }
+            text += "<br>未完成" + res.unchecked.length + "人";
             if (res.unchecked.length > 0) {
-                text += "<br>未完成" + res.unchecked.length + "人";
                 text += ",分别为:";
                 for (let i of res.unchecked) {
                     text += '<br>' + i.username + ' ' + i.nickname;
