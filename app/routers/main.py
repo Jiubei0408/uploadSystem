@@ -13,7 +13,7 @@ bp = Blueprint('main', __name__)
 
 @bp.route('/')
 def index():
-    res = Notifications.search()
+    res = Notifications.search(order={'id': 'desc'})
     if current_user.is_anonymous:
         checked_list = {'data': []}
     else:
