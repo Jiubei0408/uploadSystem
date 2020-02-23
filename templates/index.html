@@ -55,7 +55,7 @@
                                         {% if item.id in checked_list %}
                                             <button class="btn btn-default disabled" disabled="disabled">已确认</button>
                                         {% else %}
-                                            <button class="btn btn-default" onclick="checkNf({{ loop.index }})">确认
+                                            <button class="btn btn-default" onclick="checkNf({{ item.id }})">确认
                                             </button>
                                         {% endif %}
                                     {% endif %}
