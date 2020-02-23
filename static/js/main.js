@@ -19,6 +19,7 @@ function toggleCollapse(id, nf_id) {
         that.collapse("hide");
         return;
     }
+    that.html("<h4>正在加载...</h4>");
     $(".collapse.in").collapse('hide');
     that.collapse('toggle');
     $.ajax({
