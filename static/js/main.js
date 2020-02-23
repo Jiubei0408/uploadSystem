@@ -30,12 +30,19 @@ function toggleCollapse(id, nf_id) {
                 return false
             }
             res = data.responseJSON.res;
-            count = res.length;
-            text = "共完成" + count + "人";
-            if (count > 0) {
+            text = "";
+            if (res.checked.length > 0) {
+                text += "共完成" + res.checked.length + "人";
                 text += ",分别为:";
-                for (let i of res) {
-                    text += '<br>' + i;
+                for (let i of res.checked) {
+                    text += '<br>' + i.username + ' ' + i.nickname;
+                }
+            }
+            if (res.unchecked.length > 0) {
+                text += "<br>未完成" + res.unchecked.length + "人";
+                text += ",分别为:";
+                for (let i of res.unchecked) {
+                    text += '<br>' + i.username + ' ' + i.nickname;
                 }
             }
             that.html("<h4>" + text + "</h4>");

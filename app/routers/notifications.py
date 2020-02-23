@@ -17,10 +17,7 @@ bp = Blueprint('notification', __name__)
 def append():
     form = AppendNotificationForm()
     content = form.content.data
-    try:
-        Notifications.create(content=content)
-    except Exception as e:
-        print(e)
+    Notifications.create(content=content)
     raise Success()
 
 
@@ -28,9 +25,20 @@ def append():
 def detail(nf_id):
     nf = Notifications.get(id=nf_id)
     if nf is None:
-        raise NotFound()
+        raise NotFound("没有找到该通知")
     result = CheckedNotification.search(nf_id=nf_id, order={'user_id': 'asc'})
-    res = [User.get(username=i.user_id)['nickname'] for i in result['data']]
+    checked = [User.get(username=i.user_id) for i in result['data']]
+    unchecked = []
+    for user in User.search()['data']:
+        if user not in checked:
+            unchecked.append(user)
+
+    res = {
+        'checked': [{'username': user.username,
+                     'nickname': user.nickname} for user in checked],
+        'unchecked': [{'username': user.username,
+                       'nickname': user.nickname} for user in unchecked]
+    }
     return jsonify({
         'code': 200,
         'res': res
