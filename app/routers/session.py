@@ -13,10 +13,10 @@ def login_api():
     if not form.validate_on_submit():
         flash(form.errors, 'error')
         return redirect(url_for('main.login'))
-    studentId = form.studentId.data
+    username = form.username.data
     password = form.password.data
     remember = form.remember_me.data
-    user = User.get(studentId=studentId, password=password)
+    user = User.get(username=username, password=password)
     if user is None:
         flash('登录失败，用户名或密码错误', 'error')
         return redirect(url_for('main.login'))

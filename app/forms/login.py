@@ -5,8 +5,8 @@ from .base import BaseForm
 
 
 class LoginForm(BaseForm):
-    studentId = StringField(label='用户名（学号）',
-                            validators=[DataRequired(), Regexp(r'^[0-9]+$', message="您输入的学号有误")])
+    username = StringField(label='用户名（学号）',
+                           validators=[DataRequired()])
 
     password = PasswordField(label='密码',
                              validators=[DataRequired()])
