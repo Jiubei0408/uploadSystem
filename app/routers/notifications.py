@@ -17,7 +17,7 @@ bp = Blueprint('notification', __name__)
 def append():
     form = AppendNotificationForm()
     content = form.content.data
-    Notifications.create(content=content)
+    Notifications.create(content=content, checked=0, total=User.count(permission=0), username=current_user.username)
     raise Success()
 
 

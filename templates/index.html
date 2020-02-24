@@ -38,6 +38,8 @@
                     <tr>
                         <td>通知编号</td>
                         <td>通知内容</td>
+                        <td>已完成</td>
+                        <td>创建人</td>
                         <td>操作</td>
                     </tr>
                     </thead>
@@ -46,6 +48,8 @@
                         <tr>
                             <td>{{ item.id }}</td>
                             <td>{{ item.content }}</td>
+                            <td>{{ item.checked }} / {{ item.total }}</td>
+                            <td>{{ item.username }}</td>
                             <td>
                                 <div>
                                     <button class="btn btn-default"
@@ -63,7 +67,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="3" style="padding: 0">
+                            <td colspan="5" style="padding: 0">
                                 <div id="collapse{{ loop.index }}" class="collapse">
                                     <h4>正在加载...</h4>
                                 </div>
