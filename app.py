@@ -20,13 +20,11 @@ def framework_error(e):
         # 调试模式
         # log
         if not app.debug:
+            print(e)
             return ServerError()
         else:
             raise e
 
 
 if __name__ == '__main__':
-    try:
-        app.run(host='0.0.0.0', port=80)
-    except Exception as e:
-        print(e)
+    app.run(host='0.0.0.0', port=80)
