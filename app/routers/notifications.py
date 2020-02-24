@@ -60,6 +60,7 @@ def check(nf_id):
         raise NotFound()
     if CheckedNotification.get(nf_id=nf.id, user_id=user.id):
         raise ParameterException('你已经确认过了')
-    nf.modify(checked=nf.checked + 1)
+    if current_user.permission != 1:
+        nf.modify(checked=nf.checked + 1)
     CheckedNotification.create(nf_id=nf.id, user_id=user.id)
     raise Success()
