@@ -39,7 +39,7 @@ function toggleCollapse(id, nf_id) {
                     text += '<br>' + i.username + ' ' + i.nickname;
                 }
             }
-            text += "<br>未完成" + res.unchecked.length + "人";
+            text += "<br><br>未完成" + res.unchecked.length + "人";
             if (res.unchecked.length > 0) {
                 text += ",分别为:";
                 for (let i of res.unchecked) {
