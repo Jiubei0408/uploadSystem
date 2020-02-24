@@ -2,7 +2,7 @@ from contextlib import contextmanager
 
 from flask_sqlalchemy import BaseQuery
 from flask_sqlalchemy import SQLAlchemy as _SQLAlchemy
-from sqlalchemy import asc, desc
+from sqlalchemy import asc, desc, func
 
 
 class SQLAlchemy(_SQLAlchemy):
@@ -103,3 +103,7 @@ class Base(db.Model):
         }
 
         return data
+
+    @classmethod
+    def count(cls, **kwargs):
+        return cls.search(**kwargs)['count']
