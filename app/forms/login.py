@@ -1,16 +1,9 @@
-from wtforms import StringField, BooleanField, PasswordField, SubmitField
-from wtforms.validators import DataRequired, Regexp
+from wtforms import StringField
+from wtforms.validators import DataRequired
 
 from .base import BaseForm
 
 
 class LoginForm(BaseForm):
-    username = StringField(label='用户名（学号）',
-                           validators=[DataRequired()])
-
-    password = PasswordField(label='密码',
-                             validators=[DataRequired()])
-
-    remember_me = BooleanField(label='记住我')
-
-    submit = SubmitField(label='登录')
+    username = StringField(validators=[DataRequired(message='用户名不能为空')])
+    password = StringField(validators=[DataRequired(message='密码不能为空')])

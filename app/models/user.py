@@ -1,10 +1,9 @@
-from sqlalchemy import Column, DateTime, String, Integer
 from flask_login import UserMixin
+from sqlalchemy import Column, DateTime, Integer, String
 
-from app.models.base import Base
 from app import login_manager
-
 from app.libs.error_code import AuthFailed
+from app.models.base import Base
 
 
 class User(UserMixin, Base):

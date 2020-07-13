@@ -1,28 +1,62 @@
 from flask import Blueprint, jsonify
-from flask_login import login_required, current_user
+from flask_login import current_user, login_required
 
-from app.models.notifications import Notifications
-from app.models.checked_notification import CheckedNotification
-from app.models.user import User
 from app.forms.append_notification import AppendNotificationForm
 from app.libs.auth import admin_only
-from app.libs.error_code import NotFound, Success, ParameterException
+from app.libs.error_code import NotFound, ParameterException, Success
+from app.models.checked_notification import CheckedNotification
+from app.models.notifications import Notifications
+from app.models.user import User
 
 bp = Blueprint('notification', __name__)
 
 
-@bp.route("/append", methods=['POST'])
+@bp.route('/append', methods=['POST'])
 @login_required
 @admin_only
 def append():
     form = AppendNotificationForm()
     content = form.content.data
-    Notifications.create(content=content, checked=0, total=User.count(permission=0), username=current_user.username)
+    Notifications.create(content=content, checked=0, total=User.count(), username=current_user.username)
     raise Success()
 
 
-@bp.route("/detail/<int:nf_id>", methods=['POST'])
+@bp.route('/summary', methods=['GET'])
+def summary():
+    raw = Notifications.search(order={'id': 'desc'})
+    if current_user.is_anonymous:
+        confirmed_list = []
+    else:
+        confirmed_list = [i.nf_id for i in CheckedNotification.search(user_id=current_user.id)['data']]
+    res = [{
+        'id': i.id,
+        'title': i.title,
+        'count': i.confirm_count,
+        'confirmed': i.id in confirmed_list,
+        'total': i.total,
+        'creator': i.creator,
+    } for i in raw['data']]
+    return jsonify({
+        'code': 200,
+        'data': res
+    })
+
+
+@bp.route('/detail/<int:nf_id>', methods=['GET'])
 def detail(nf_id):
+    nf = Notifications.get_by_id(nf_id)
+    if nf is None:
+        raise NotFound("没有找到该通知")
+    return jsonify({
+        'code': 200,
+        'data': nf.detail
+    })
+
+
+@bp.route('/confirm_detail/<int:nf_id>', methods=['GET'])
+@login_required
+@admin_only
+def confirm_detail(nf_id):
     nf = Notifications.get(id=nf_id)
     if nf is None:
         raise NotFound("没有找到该通知")
@@ -31,11 +65,8 @@ def detail(nf_id):
     unchecked = []
     for data in result['data']:
         user = User.get(username=data.user_id)
-        if user.permission == 0:
-            checked.append(user)
+        checked.append(user)
     for user in User.search()['data']:
-        if user.permission == 1:
-            continue
         if user not in checked:
             unchecked.append(user)
 
@@ -51,16 +82,15 @@ def detail(nf_id):
     })
 
 
-@bp.route("/check/<int:nf_id>", methods=['POST'])
+@bp.route('/confirm/<int:nf_id>', methods=['POST'])
 @login_required
-def check(nf_id):
+def confirm(nf_id):
     user = current_user
-    nf = Notifications.get(id=nf_id)
+    nf = Notifications.get_by_id(nf_id)
     if nf is None:
-        raise NotFound()
+        raise NotFound('找不到这个通知')
     if CheckedNotification.get(nf_id=nf.id, user_id=user.id):
         raise ParameterException('你已经确认过了')
-    if current_user.permission != 1:
-        nf.modify(checked=nf.checked + 1)
+    nf.modify(confirm_count=nf.confirm_count + 1)
     CheckedNotification.create(nf_id=nf.id, user_id=user.id)
     raise Success()

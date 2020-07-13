@@ -1,14 +1,14 @@
 import os
 from datetime import date, datetime
 
-from flask_login import LoginManager
 from flask import Flask as _Flask
 from flask.json import JSONEncoder as _JSONEncoder
-
 from flask_bootstrap import Bootstrap
+from flask_cors import CORS
+from flask_login import LoginManager
 
-from app.models.base import db
 from app.libs.error_code import ServerError
+from app.models.base import db
 
 
 class JSONEncoder(_JSONEncoder):
@@ -26,6 +26,7 @@ class Flask(_Flask):
     json_encoder = JSONEncoder
 
 
+cors = CORS(supports_credentials=True)
 login_manager = LoginManager()
 bootstrap = Bootstrap()
 
@@ -33,8 +34,8 @@ bootstrap = Bootstrap()
 def register_bp(flask_app):
     from app.routers import get_blueprints
     for bp in get_blueprints():
-        bp_name, url_prefix = bp
-        flask_app.register_blueprint(bp_name, url_prefix=url_prefix)
+        bp, url_prefix = bp
+        flask_app.register_blueprint(bp, url_prefix=url_prefix)
 
 
 def register_plugin(flask_app):
@@ -43,6 +44,7 @@ def register_plugin(flask_app):
     with flask_app.app_context():
         db.create_all()
 
+    cors.init_app(flask_app)
     login_manager.init_app(flask_app)
     bootstrap.init_app(flask_app)
 

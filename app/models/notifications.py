@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, ForeignKey, Integer, String
 
 from .base import Base
 from .user import User
@@ -8,7 +8,8 @@ class Notifications(Base):
     __tablename__ = 'notifications'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    content = Column(String(10000))
-    checked = Column(Integer, default=0)
+    title = Column(String(100))
+    detail = Column(String(10000))
+    confirm_count = Column(Integer, default=0)
     total = Column(Integer)
-    username = Column(String(100), ForeignKey(User.username))
+    creator = Column(String(100), ForeignKey(User.username))

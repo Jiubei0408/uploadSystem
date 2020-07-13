@@ -1,12 +1,10 @@
-from flask import Blueprint
+from flask import Blueprint, render_template
 from flask_login import current_user
 
 from app.forms.login import LoginForm
 from app.models.checked_notification import CheckedNotification
-from app.models.user import User
 from app.models.notifications import Notifications
-
-from flask import render_template
+from app.models.user import User
 
 bp = Blueprint('main', __name__)
 

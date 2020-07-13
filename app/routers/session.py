@@ -1,32 +1,49 @@
-from flask import Blueprint, redirect, url_for, flash
-from flask_login import login_user, login_required, logout_user
+from flask import Blueprint, jsonify
+from flask_login import current_user, login_required, login_user, logout_user
 
 from app.forms.login import LoginForm
+from app.libs.error_code import AuthFailed, Success
 from app.models.user import User
 
 bp = Blueprint('session', __name__)
 
 
-@bp.route('/login', methods=['POST'])
+@bp.route('', methods=['GET'])
+def get_session():
+    user = current_user
+    if user.is_anonymous:
+        return jsonify({
+            'code': 404,
+            'data': {
+                'username': '',
+                'nickname': '',
+                'permission': 0
+            }
+        })
+    return jsonify({
+        'code': 200,
+        'data': {
+            'username': user.username,
+            'nickname': user.nickname,
+            'permission': user.permission
+        }
+    })
+
+
+@bp.route('', methods=['POST'])
 def login_api():
-    form = LoginForm()
-    if not form.validate_on_submit():
-        flash(form.errors, 'error')
-        return redirect(url_for('main.login'))
-    username = form.username.data
-    password = form.password.data
-    remember = form.remember_me.data
-    user = User.get(username=username, password=password)
-    if user is None:
-        flash('登录失败，用户名或密码错误', 'error')
-        return redirect(url_for('main.login'))
-    flash('登录成功', 'success')
-    login_user(user, remember)
-    return redirect(url_for('main.index'))
+    form = LoginForm().validate_for_api().data_
+    username = form['username']
+    password = form['password']
+    user = User.get_by_id(username)
+    if user is None or user.password != password:
+        raise AuthFailed('登录失败，用户名或密码错误')
+    login_user(user, remember=False)
+    raise Success('登录成功')
 
 
-@bp.route('/logout', methods=['POST'])
+@bp.route('', methods=['DELETE'])
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('main.index'))
+    raise Success('登出成功')
