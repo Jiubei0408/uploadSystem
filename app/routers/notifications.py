@@ -104,3 +104,29 @@ def delete(nf_id):
         raise NotFound('找不到这个通知')
     nf.delete()
     raise Success('已删除')
+
+
+@bp.route('/test', methods=['POST'])
+@login_required
+@admin_only
+def generate_test():
+    checks = CheckedNotification.search()['data']
+    for check in checks:
+        check.delete()
+    nfs = Notifications.search()['data']
+    for nf in nfs:
+        nf.delete()
+
+    for i in range(1, 11):
+        data = {
+            'confirm_count': 0,
+            'total': User.count(),
+            'creator': current_user.username,
+            'title': 'test' + str(i),
+            'detail': 'detail ' * i
+        }
+        Notifications.create(**data)
+    CheckedNotification.create(nf_id=3, user_id=2)
+    nf = Notifications.get_by_id(3)
+    nf.modify(confirm_count=nf.confirm_count + 1)
+    raise Success('generated')
