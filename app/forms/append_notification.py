@@ -5,4 +5,5 @@ from .base import BaseForm
 
 
 class AppendNotificationForm(BaseForm):
-    content = StringField(label='内容', validators=[DataRequired()])
+    title = StringField(validators=[DataRequired()])
+    detail = StringField(validators=[DataRequired()])
