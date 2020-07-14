@@ -15,9 +15,8 @@ bp = Blueprint('notification', __name__)
 @login_required
 @admin_only
 def append():
-    form = AppendNotificationForm()
-    content = form.content.data
-    Notifications.create(content=content, checked=0, total=User.count(), username=current_user.username)
+    form = AppendNotificationForm().validate_for_api().data_
+    Notifications.create(confirm_count=0, total=User.count(), creator=current_user.username, **form)
     raise Success()
 
 
@@ -94,3 +93,14 @@ def confirm(nf_id):
     nf.modify(confirm_count=nf.confirm_count + 1)
     CheckedNotification.create(nf_id=nf.id, user_id=user.id)
     raise Success()
+
+
+@bp.route('/<int:nf_id>', methods=['DELETE'])
+@login_required
+@admin_only
+def delete(nf_id):
+    nf = Notifications.get_by_id(nf_id)
+    if nf is None:
+        raise NotFound('找不到这个通知')
+    nf.delete()
+    raise Success('已删除')
