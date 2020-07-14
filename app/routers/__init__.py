@@ -1,7 +1,6 @@
-from app.routers import main, notifications, session
+from app.routers import notifications, session
 
 
 def get_blueprints():
-    return [(main.bp, '/'),
-            (session.bp, '/session'),
+    return [(session.bp, '/session'),
             (notifications.bp, '/notification')]
