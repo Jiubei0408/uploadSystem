@@ -31,7 +31,7 @@ def get_session():
 
 
 @bp.route('', methods=['POST'])
-def login_api():
+def login():
     form = LoginForm().validate_for_api().data_
     username = form['username']
     password = form['password']
