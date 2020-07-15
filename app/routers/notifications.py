@@ -126,7 +126,7 @@ def generate_test():
             'detail': 'detail ' * i
         }
         Notifications.create(**data)
-    CheckedNotification.create(nf_id=3, user_id=2)
+    CheckedNotification.create(nf_id=3, user_id='test')
     nf = Notifications.get_by_id(3)
     nf.modify(confirm_count=nf.confirm_count + 1)
     raise Success('generated')
